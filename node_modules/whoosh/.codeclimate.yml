@@ -1,0 +1,15 @@
+engines:
+  eslint:
+    enabled: false
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+    exclude_paths:
+      - test/**
+
+ratings:
+  paths:
+  - index.js
+  - lib/**

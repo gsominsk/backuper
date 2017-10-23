@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/
+			libs/jquery/1.3.0/jquery.min.js"></script>
+			<script type="text/javascript">
+			var tick = 0;
+			var today = new Date();
+			var auto_refresh = setInterval(
+			function ()
+			{
+			tick++;
+			//$('#load_tweets').load('getCurTime?tick='+tick).fadeIn("slow");
+			var dd = today.getDate();
+			var mm = today.getMonth()+1;
+			var yyyy = today.getFullYear();
+			var hh = today.getHours();
+			var mm = today.getMinutes();
+			var ss = today.getSeconds();
+			$('#load_tweets').load('getPosImage&tick='+tick+yyyy+mm+dd+hh+mm+ss).fadeIn("slow");
+			//load_tweets1.innerHTML = tick;
+		}, 1000); // refresh every 10000 milliseconds
+		</script>
+
+		<div id="load_tweets"> </div>
+
+	</body>
+
+</html>
