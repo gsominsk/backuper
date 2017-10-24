@@ -1,2 +1,0 @@
-# backuper
-Simple backup server.

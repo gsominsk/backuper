@@ -11,16 +11,18 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express' });
 });
 
-router.post('/test', function(req, res, next) {
-    // copyFileToServer(req, res);
+router.post('/deleteBckps', function(req, res, next) {
     deleteFilesFromServer(req, res);
+});
+router.post('/createBckps', function(req, res, next) {
+    copyFileToServer(req, res);
 });
 
 module.exports = router;
 
 function deleteFilesFromServer(req, res) {
     var data = {
-        range: 7
+        range: 0
     };
 
     needle.request('post', 'localhost:1070/deleteLocalBackups', JSON.stringify(data), {json:true}, function(err, resp) {

@@ -113,6 +113,10 @@ var sendVia = {
 
 function getDataForBackup(response,request) {
     ll = '';
+    console.time();
+
+    var timecheck = time();
+
     response.writeHead(200, {"Content-Type": "text/html"});
 
     var data        = '';
@@ -170,13 +174,15 @@ function getDataForBackup(response,request) {
                     createLog('==============================');
 
                     sendVia[data.config.protocol](bckpPaths, data.config, response, () => callback(null, 1));
-                },
-                // удаление файла сразу после отправки на сервер
-                // function(callback) {
-                //     cleanBckps(() => callback(null, 1));
-                // }
+                }
             ],
             function(err, results) {
+                createLog();
+                createLog('==============================');
+                createLog('             time             ');
+                createLog('==============================');
+                createLog(timecheck());
+
                 response.write(ll);
                 response.end();
             });
@@ -191,7 +197,7 @@ function createArchive(bckp, config, unique, callback) {
 
     var now         = new Date();
     var dirOrFile   = bckp.filename.trim().length == 0;
-    var bckpName    = `${__dirname}/../backups/bckp_${unique}_${now.getYear()}-${now.getMonth()}-${now.getDay()}_${now.getHours()}-${now.getMinutes()}.zip`;
+    var bckpName    = `${__dirname}/../backups/bckp_${unique}_${moment().get('year')}-${moment().get('month')+1}-${moment().get('date')}_${now.getHours()}-${now.getMinutes()}.zip`;
     var output = fs.createWriteStream(bckpName);
     var archive = archiver('zip', {
         zlib: { level: 9 } // Sets the compression level.
@@ -347,6 +353,14 @@ function createLog (str) {
     ll += str;
 }
 
+function time () {
+    var begin = Date.now();
+    return () => {
+        var end = Date.now();
+        return (end-begin)/1000;
+    }
+}
+
 /**
  *
  * @param range
@@ -365,52 +379,110 @@ function createLog (str) {
 function cleanBckps (response, request) {
     ll = '';
 
+    // start time test
+    var timecheck = time();
+
     response.writeHead(200, {"Content-Type": "text/html"});
 
-    createLog('==============================');
-    createLog(`        deleting files        `);
-    createLog('==============================');
+    createLog(`[Request handler 'cleanBckps' was called] ... \n`);
 
-    var dir = `${__dirname}/../backups/`;
-    var data        = '';
-    var now = new Date;
+    var dir     = `${__dirname}/../backups/`;
+    var endDate     = new Date();
+    console.log(endDate);
 
-    request.addListener('data', (chunk) => data += chunk);
-    request.addListener('end', () => {
-        data = JSON.parse(data);
-        createLog(data);
+    async.waterfall([
+        function (callback) {
+            var data    = '';
 
-        fs.readdir(dir, (err, files) => {
-            if (err) return callback(createLog(`[err] : ${err}`));
+            request.addListener('data', (chunk) => data += chunk);
+            request.addListener('end', () => {
+                data = JSON.parse(data);
 
-            var q = async.queue(function(file, callback) {
-                createLog(`[file] : ${file}`);
+                createLog('==============================');
+                createLog(`      information added       `);
+                createLog('==============================');
+                createLog(`[data] : ${sObj(data)}`);
 
-                // callback();
-                fs.stat(`${dir}/${file}`, function(err, stats) {
-                    console.log(stats.birthtime);
-                    console.log(new Date());
+                callback(null, data)
+            });
+        },
+        function (data, callback) {
+            fs.readdir(dir, (err, files) => {
+                if (err) return callback(createLog(`[err] : ${err}`));
+                if (files.length == 0) return callback(createLog(`[err] : no files in directory`));
 
-                    var d = moment().subtract(6, 'days');
-                    console.log(d);
-                    console.log(d.match(/(?:\".*\")/ig)[0]);
-                    console.log(d.match(/(?:\".*\")/ig)[0].substring(1, d.length - 1));
+                createLog('==============================');
+                createLog(`      checking files date     `);
+                createLog('==============================');
 
-                    callback();
-                });
-            }, 1);
+                for (const file of files) {
+                    q.push({
+                        file    : file,
+                        range   : data.range
+                    }, false);
+                }
 
-            for (const file of files) {
-                q.push(file, false);
-            }
+                q.drain = () => {
+                    callback(null);
+                };
+            });
+        }
+    ],
+    function (err, result) {
+        if (err) createLog(`[err] : ${err}`);
+        createLog();
+        createLog('==============================');
+        createLog('             time             ');
+        createLog('==============================');
+        createLog(timecheck());
+        response.write(ll);
+        response.end();
+    });
 
-            q.drain = () => {
-                response.write(ll);
-                response.end();
+    var q = async.queue(function(data, callback) {
+        fs.stat(`${dir}/${data.file}`, function(err, stats) {
+
+            var startDate = moment().subtract(data.range, 'days').format().toString();
+
+            createLog(`[file]       : ${data.file}`);
+            createLog(`[ranges]     :_${startDate}_ <---?? ${stats.birthtime} ??---> _${endDate}_`);
+            createLog(`[in range]   : ${dates.inRange(stats.birthtime, startDate, endDate)}`);
+
+            filesToDeleteQueue.push({
+                name: data.file,
+                path: dir,
+                delete: !dates.inRange(stats.birthtime, startDate, endDate)
+            });
+
+            filesToDeleteQueue.drain = () => {
+                callback();
             };
         });
-    });
+    }, 1);
+
+    var filesToDeleteQueue = async.queue(function(file, callback) {
+        // createLog();
+        if (file.delete == true) {
+            fs.unlink(`${file.path}/${file.name}`, (err) => {
+                callback(createLog(err ? `[err] : ${err}` : `[file]         : ${file.name} deleted\n`))
+                createLog();
+            });
+        } else {
+            callback(createLog(`[file]       : ${file.name} not deleted\n`));
+            createLog();
+        }
+    }, 1);
+
+    // можно увеличить скорость, нам приходят файлы, мы их считываем с помощью fs.stat после чего
+    // впушиваем их в новую async.queue который удаляет файлы, синхронности работы не требуется так
+    // что можно ускорить.
 }
+
+// работает
+// var d = moment().subtract(1, 'days').format().toString();
+//
+// console.log(dates.inRange(stats.birthtime, d, new Date()));
+
 
 /**
  * OLD VERSION
