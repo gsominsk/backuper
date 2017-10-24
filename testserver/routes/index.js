@@ -45,7 +45,7 @@ function copyFileToServer (req, res) {
         bckps: [{
             folder: __dirname+'/../backuptest',
             filename: '',
-            backuppath: '.',
+            backuppath: 'backup/',
             maxBackupFilesToServer: ''
         }, {
             folder: __dirname+'/../backuptest',

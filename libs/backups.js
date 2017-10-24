@@ -195,9 +195,13 @@ function getDataForBackup(response,request) {
 function createArchive(bckp, config, unique, callback) {
     createLog('[creating archive] ...');
 
+    var path = `${__dirname}/../backups`;
+    // если папки для бекапов архивированных бекапов еще не существует, создать ее.
+    if (fs.existsSync(path) == false) fs.mkdirSync(path, 0744);
+
     var now         = new Date();
     var dirOrFile   = bckp.filename.trim().length == 0;
-    var bckpName    = `${__dirname}/../backups/bckp_${unique}_${moment().get('year')}-${moment().get('month')+1}-${moment().get('date')}_${now.getHours()}-${now.getMinutes()}.zip`;
+    var bckpName    = `${path}/bckp_${unique}_${moment().get('year')}-${moment().get('month')+1}-${moment().get('date')}_${now.getHours()}-${now.getMinutes()}.zip`;
     var output = fs.createWriteStream(bckpName);
     var archive = archiver('zip', {
         zlib: { level: 9 } // Sets the compression level.

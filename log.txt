@@ -37240,3 +37240,400 @@
 
 [2017-10-24 13:24:10.452] [TRACE] [default] - 
 
+[2017-10-24 13:38:19.195] [TRACE] [default] - connection
+[2017-10-24 13:38:19.213] [TRACE] [default] - [Request handler 'getDataForBackup' was called] ... 
+
+[2017-10-24 13:38:19.219] [TRACE] [default] - ==============================
+
+[2017-10-24 13:38:57.050] [TRACE] [default] - connection
+[2017-10-24 13:38:57.067] [TRACE] [default] - [Request handler 'getDataForBackup' was called] ... 
+
+[2017-10-24 13:40:34.274] [TRACE] [default] - connection
+[2017-10-24 13:40:34.283] [TRACE] [default] - [Request handler 'getDataForBackup' was called] ... 
+
+[2017-10-24 13:40:34.290] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:34.291] [TRACE] [default] -              data             
+
+[2017-10-24 13:40:34.291] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:34.308] [TRACE] [default] - { config: 
+   { protocol: 'FTP',
+     host: '66.220.9.50',
+     port: '21',
+     user: 'gsominsk',
+     passwd: '19983562' },
+  bckps: 
+   [ { folder: '/home/jyscha/projects/bckupserver/testserver/routes/../backuptest',
+       filename: '',
+       backuppath: '.',
+       maxBackupFilesToServer: '' },
+     { folder: '/home/jyscha/projects/bckupserver/testserver/routes/../backuptest',
+       filename: 'backup.txt',
+       backuppath: 'backup/',
+       maxBackupFilesToServer: '' } ] }
+
+[2017-10-24 13:40:34.308] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:34.309] [TRACE] [default] -  checking data configuration  
+
+[2017-10-24 13:40:34.309] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:34.309] [TRACE] [default] - [checking successful] ...
+
+[2017-10-24 13:40:34.309] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:34.309] [TRACE] [default] -   starting archivating files  
+
+[2017-10-24 13:40:34.310] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:34.312] [TRACE] [default] - [creating archive] ...
+
+[2017-10-24 13:40:34.321] [TRACE] [default] - [checking file or dir] ...
+
+[2017-10-24 13:40:34.321] [TRACE] [default] - [it's a dir]
+
+[2017-10-24 13:40:34.322] [TRACE] [default] - { folder: '/home/jyscha/projects/bckupserver/testserver/routes/../backuptest/',
+  filename: '',
+  backuppath: '.',
+  maxBackupFilesToServer: 0 }
+
+[2017-10-24 13:40:34.358] [TRACE] [default] - [total bytes] : 266
+
+[2017-10-24 13:40:34.359] [TRACE] [default] - [archiver has been finalized] ...
+
+[2017-10-24 13:40:34.359] [TRACE] [default] - [creating archive] ...
+
+[2017-10-24 13:40:34.361] [TRACE] [default] - [checking file or dir] ...
+
+[2017-10-24 13:40:34.361] [TRACE] [default] - [it's a file]
+
+[2017-10-24 13:40:34.362] [TRACE] [default] - { folder: '/home/jyscha/projects/bckupserver/testserver/routes/../backuptest/',
+  filename: 'backup.txt',
+  backuppath: 'backup',
+  maxBackupFilesToServer: 0 }
+
+[2017-10-24 13:40:34.368] [TRACE] [default] - [total bytes] : 136
+
+[2017-10-24 13:40:34.369] [TRACE] [default] - [archiver has been finalized] ...
+
+[2017-10-24 13:40:34.369] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:34.369] [TRACE] [default] -        created backups        
+
+[2017-10-24 13:40:34.369] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:34.369] [TRACE] [default] - [ { name: '/home/jyscha/projects/bckupserver/libs/../backups/bckp_0_2017-10-24_13-40.zip',
+    backupPath: '.' },
+  { name: '/home/jyscha/projects/bckupserver/libs/../backups/bckp_1_2017-10-24_13-40.zip',
+    backupPath: 'backup' } ]
+
+[2017-10-24 13:40:34.370] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:34.371] [TRACE] [default] -        sending via FTP
+
+[2017-10-24 13:40:34.371] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:34.371] [TRACE] [default] - [Get into sendFilesViaFTP] ...
+
+[2017-10-24 13:40:34.374] [TRACE] [default] - [connecting] ... 
+
+[2017-10-24 13:40:35.467] [TRACE] [default] - [connected] ... 
+
+[2017-10-24 13:40:36.203] [TRACE] [default] - [file] : bckp_0_2017-10-24_13-40.zip.gz 
+
+[2017-10-24 13:40:36.204] [TRACE] [default] - [path] : ./bckp_0_2017-10-24_13-40.zip.gz 
+
+[2017-10-24 13:40:36.205] [TRACE] [default] - [file added via ftp] ... 
+
+[2017-10-24 13:40:36.939] [TRACE] [default] - [file] : bckp_1_2017-10-24_13-40.zip.gz 
+
+[2017-10-24 13:40:36.940] [TRACE] [default] - [path] : backup/bckp_1_2017-10-24_13-40.zip.gz 
+
+[2017-10-24 13:40:36.942] [TRACE] [default] - [file added via ftp] ... 
+
+[2017-10-24 13:40:36.945] [TRACE] [default] - 
+
+[2017-10-24 13:40:36.946] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:36.946] [TRACE] [default] -              time             
+
+[2017-10-24 13:40:36.946] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:36.947] [TRACE] [default] - 2.666
+
+[2017-10-24 13:40:43.408] [TRACE] [default] - connection
+[2017-10-24 13:40:43.412] [TRACE] [default] - [Request handler 'getDataForBackup' was called] ... 
+
+[2017-10-24 13:40:43.413] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:43.413] [TRACE] [default] -              data             
+
+[2017-10-24 13:40:43.413] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:43.415] [TRACE] [default] - { config: 
+   { protocol: 'FTP',
+     host: '66.220.9.50',
+     port: '21',
+     user: 'gsominsk',
+     passwd: '19983562' },
+  bckps: 
+   [ { folder: '/home/jyscha/projects/bckupserver/testserver/routes/../backuptest',
+       filename: '',
+       backuppath: '.',
+       maxBackupFilesToServer: '' },
+     { folder: '/home/jyscha/projects/bckupserver/testserver/routes/../backuptest',
+       filename: 'backup.txt',
+       backuppath: 'backup/',
+       maxBackupFilesToServer: '' } ] }
+
+[2017-10-24 13:40:43.416] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:43.416] [TRACE] [default] -  checking data configuration  
+
+[2017-10-24 13:40:43.416] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:43.417] [TRACE] [default] - [checking successful] ...
+
+[2017-10-24 13:40:43.417] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:43.417] [TRACE] [default] -   starting archivating files  
+
+[2017-10-24 13:40:43.417] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:43.418] [TRACE] [default] - [creating archive] ...
+
+[2017-10-24 13:40:43.420] [TRACE] [default] - [checking file or dir] ...
+
+[2017-10-24 13:40:43.420] [TRACE] [default] - [it's a dir]
+
+[2017-10-24 13:40:43.422] [TRACE] [default] - { folder: '/home/jyscha/projects/bckupserver/testserver/routes/../backuptest/',
+  filename: '',
+  backuppath: '.',
+  maxBackupFilesToServer: 0 }
+
+[2017-10-24 13:40:43.449] [TRACE] [default] - [total bytes] : 266
+
+[2017-10-24 13:40:43.449] [TRACE] [default] - [archiver has been finalized] ...
+
+[2017-10-24 13:40:43.450] [TRACE] [default] - [creating archive] ...
+
+[2017-10-24 13:40:43.454] [TRACE] [default] - [checking file or dir] ...
+
+[2017-10-24 13:40:43.454] [TRACE] [default] - [it's a file]
+
+[2017-10-24 13:40:43.455] [TRACE] [default] - { folder: '/home/jyscha/projects/bckupserver/testserver/routes/../backuptest/',
+  filename: 'backup.txt',
+  backuppath: 'backup',
+  maxBackupFilesToServer: 0 }
+
+[2017-10-24 13:40:43.467] [TRACE] [default] - [total bytes] : 136
+
+[2017-10-24 13:40:43.467] [TRACE] [default] - [archiver has been finalized] ...
+
+[2017-10-24 13:40:43.467] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:43.467] [TRACE] [default] -        created backups        
+
+[2017-10-24 13:40:43.467] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:43.468] [TRACE] [default] - [ { name: '/home/jyscha/projects/bckupserver/libs/../backups/bckp_0_2017-10-24_13-40.zip',
+    backupPath: '.' },
+  { name: '/home/jyscha/projects/bckupserver/libs/../backups/bckp_1_2017-10-24_13-40.zip',
+    backupPath: 'backup' } ]
+
+[2017-10-24 13:40:43.468] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:43.468] [TRACE] [default] -        sending via FTP
+
+[2017-10-24 13:40:43.468] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:43.468] [TRACE] [default] - [Get into sendFilesViaFTP] ...
+
+[2017-10-24 13:40:43.469] [TRACE] [default] - [connecting] ... 
+
+[2017-10-24 13:40:44.551] [TRACE] [default] - [connected] ... 
+
+[2017-10-24 13:40:45.287] [TRACE] [default] - [file] : bckp_0_2017-10-24_13-40.zip.gz 
+
+[2017-10-24 13:40:45.288] [TRACE] [default] - [path] : ./bckp_0_2017-10-24_13-40.zip.gz 
+
+[2017-10-24 13:40:45.291] [TRACE] [default] - [file added via ftp] ... 
+
+[2017-10-24 13:40:46.032] [TRACE] [default] - [file] : bckp_1_2017-10-24_13-40.zip.gz 
+
+[2017-10-24 13:40:46.033] [TRACE] [default] - [path] : backup/bckp_1_2017-10-24_13-40.zip.gz 
+
+[2017-10-24 13:40:46.033] [TRACE] [default] - [file added via ftp] ... 
+
+[2017-10-24 13:40:46.034] [TRACE] [default] - 
+
+[2017-10-24 13:40:46.034] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:46.034] [TRACE] [default] -              time             
+
+[2017-10-24 13:40:46.034] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:46.035] [TRACE] [default] - 2.622
+
+[2017-10-24 13:40:49.294] [TRACE] [default] - connection
+[2017-10-24 13:40:49.295] [TRACE] [default] - [Request handler 'getDataForBackup' was called] ... 
+
+[2017-10-24 13:40:49.295] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:49.295] [TRACE] [default] -              data             
+
+[2017-10-24 13:40:49.295] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:49.296] [TRACE] [default] - { config: 
+   { protocol: 'FTP',
+     host: '66.220.9.50',
+     port: '21',
+     user: 'gsominsk',
+     passwd: '19983562' },
+  bckps: 
+   [ { folder: '/home/jyscha/projects/bckupserver/testserver/routes/../backuptest',
+       filename: '',
+       backuppath: '.',
+       maxBackupFilesToServer: '' },
+     { folder: '/home/jyscha/projects/bckupserver/testserver/routes/../backuptest',
+       filename: 'backup.txt',
+       backuppath: 'backup/',
+       maxBackupFilesToServer: '' } ] }
+
+[2017-10-24 13:40:49.296] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:49.297] [TRACE] [default] -  checking data configuration  
+
+[2017-10-24 13:40:49.297] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:49.297] [TRACE] [default] - [checking successful] ...
+
+[2017-10-24 13:40:49.297] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:49.297] [TRACE] [default] -   starting archivating files  
+
+[2017-10-24 13:40:49.298] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:49.298] [TRACE] [default] - [creating archive] ...
+
+[2017-10-24 13:40:49.299] [TRACE] [default] - [checking file or dir] ...
+
+[2017-10-24 13:40:49.300] [TRACE] [default] - [it's a dir]
+
+[2017-10-24 13:40:49.302] [TRACE] [default] - { folder: '/home/jyscha/projects/bckupserver/testserver/routes/../backuptest/',
+  filename: '',
+  backuppath: '.',
+  maxBackupFilesToServer: 0 }
+
+[2017-10-24 13:40:49.318] [TRACE] [default] - [total bytes] : 266
+
+[2017-10-24 13:40:49.318] [TRACE] [default] - [archiver has been finalized] ...
+
+[2017-10-24 13:40:49.318] [TRACE] [default] - [creating archive] ...
+
+[2017-10-24 13:40:49.319] [TRACE] [default] - [checking file or dir] ...
+
+[2017-10-24 13:40:49.319] [TRACE] [default] - [it's a file]
+
+[2017-10-24 13:40:49.320] [TRACE] [default] - { folder: '/home/jyscha/projects/bckupserver/testserver/routes/../backuptest/',
+  filename: 'backup.txt',
+  backuppath: 'backup',
+  maxBackupFilesToServer: 0 }
+
+[2017-10-24 13:40:49.331] [TRACE] [default] - [total bytes] : 136
+
+[2017-10-24 13:40:49.331] [TRACE] [default] - [archiver has been finalized] ...
+
+[2017-10-24 13:40:49.332] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:49.332] [TRACE] [default] -        created backups        
+
+[2017-10-24 13:40:49.332] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:49.332] [TRACE] [default] - [ { name: '/home/jyscha/projects/bckupserver/libs/../backups/bckp_0_2017-10-24_13-40.zip',
+    backupPath: '.' },
+  { name: '/home/jyscha/projects/bckupserver/libs/../backups/bckp_1_2017-10-24_13-40.zip',
+    backupPath: 'backup' } ]
+
+[2017-10-24 13:40:49.332] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:49.332] [TRACE] [default] -        sending via FTP
+
+[2017-10-24 13:40:49.332] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:49.332] [TRACE] [default] - [Get into sendFilesViaFTP] ...
+
+[2017-10-24 13:40:49.333] [TRACE] [default] - [connecting] ... 
+
+[2017-10-24 13:40:50.403] [TRACE] [default] - [connected] ... 
+
+[2017-10-24 13:40:51.162] [TRACE] [default] - [file] : bckp_0_2017-10-24_13-40.zip.gz 
+
+[2017-10-24 13:40:51.162] [TRACE] [default] - [path] : ./bckp_0_2017-10-24_13-40.zip.gz 
+
+[2017-10-24 13:40:51.162] [TRACE] [default] - [file added via ftp] ... 
+
+[2017-10-24 13:40:51.922] [TRACE] [default] - [file] : bckp_1_2017-10-24_13-40.zip.gz 
+
+[2017-10-24 13:40:51.929] [TRACE] [default] - [path] : backup/bckp_1_2017-10-24_13-40.zip.gz 
+
+[2017-10-24 13:40:51.942] [TRACE] [default] - [file added via ftp] ... 
+
+[2017-10-24 13:40:51.942] [TRACE] [default] - 
+
+[2017-10-24 13:40:51.942] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:51.942] [TRACE] [default] -              time             
+
+[2017-10-24 13:40:51.942] [TRACE] [default] - ==============================
+
+[2017-10-24 13:40:51.942] [TRACE] [default] - 2.647
+
+[2017-10-24 13:42:28.035] [TRACE] [default] - connection
+[2017-10-24 13:42:28.056] [TRACE] [default] - [Request handler 'cleanBckps' was called] ... 
+
+[2017-10-24 13:42:28.063] [TRACE] [default] - ==============================
+
+[2017-10-24 13:42:28.064] [TRACE] [default] -       information added       
+
+[2017-10-24 13:42:28.064] [TRACE] [default] - ==============================
+
+[2017-10-24 13:42:28.080] [TRACE] [default] - [data] : { range: 0 }
+
+[2017-10-24 13:42:28.083] [TRACE] [default] - ==============================
+
+[2017-10-24 13:42:28.083] [TRACE] [default] -       checking files date     
+
+[2017-10-24 13:42:28.083] [TRACE] [default] - ==============================
+
+[2017-10-24 13:42:28.088] [TRACE] [default] - [file]       : bckp_0_2017-10-24_13-40.zip
+
+[2017-10-24 13:42:28.089] [TRACE] [default] - [ranges]     :_2017-10-24T13:42:28+03:00_ <---?? Tue Oct 24 2017 13:40:49 GMT+0300 (EEST) ??---> _Tue Oct 24 2017 13:42:28 GMT+0300 (EEST)_
+
+[2017-10-24 13:42:28.089] [TRACE] [default] - [in range]   : false
+
+[2017-10-24 13:42:28.090] [TRACE] [default] - [file]         : bckp_0_2017-10-24_13-40.zip deleted
+
+[2017-10-24 13:42:28.091] [TRACE] [default] - 
+
+[2017-10-24 13:42:28.091] [TRACE] [default] - [file]       : bckp_1_2017-10-24_13-40.zip
+
+[2017-10-24 13:42:28.092] [TRACE] [default] - [ranges]     :_2017-10-24T13:42:28+03:00_ <---?? Tue Oct 24 2017 13:40:49 GMT+0300 (EEST) ??---> _Tue Oct 24 2017 13:42:28 GMT+0300 (EEST)_
+
+[2017-10-24 13:42:28.092] [TRACE] [default] - [in range]   : false
+
+[2017-10-24 13:42:28.092] [TRACE] [default] - [file]         : bckp_1_2017-10-24_13-40.zip deleted
+
+[2017-10-24 13:42:28.093] [TRACE] [default] - 
+
+[2017-10-24 13:42:28.093] [TRACE] [default] - ==============================
+
+[2017-10-24 13:42:28.093] [TRACE] [default] -              time             
+
+[2017-10-24 13:42:28.093] [TRACE] [default] - ==============================
+
+[2017-10-24 13:42:28.094] [TRACE] [default] - 0.042
+
+[2017-10-24 13:42:28.098] [TRACE] [default] - 
+
