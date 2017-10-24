@@ -282,24 +282,43 @@ function sendFilesViaFTP (files, config, response, callback) {
 function sendFilesViaSFTP (files, config, response, callback) {
     createLog(`[Get into sendFilesViaSFTP] ...`);
 
+    var path = `${__dirname}/../backups`;
     var q = async.queue((file, callback) => {
         var name = file.name.split('/')[file.name.split('/').length - 1];
-        client.scp(file, {
+
+        var Client = require('ssh2').Client;
+        var conn = new Client();
+
+        conn.on('connect', () => createLog('[connected via sftp server] ...'));
+
+        conn.on('error', (err) => createLog(`[err] : ${err}`));
+        conn.on('end',  () => createLog(`[connection ended] ...`));
+
+        conn.on('ready', function() {
+            conn.sftp(function(err, sftp) {
+                if (err) return callback(createLog(`[err] : ${err}`));
+                createLog(`[name] : ${name}`);
+                createLog(`[path] : ${`${file.backupPath}/${name}`}`);
+
+                sftp.on('end', () => createLog(`[SFTP session ended] ...`));
+                sftp.on('close', () => {
+                    console.log(`[SFTP session closed] ...`);
+                    callback(sftp.end());
+                });
+
+                var from = fs.createReadStream(`${path}/${name}`);
+                var to = sftp.createWriteStream(`${file.backupPath}/${name}`);
+
+                from.on('close', () => callback(sftp.end()));
+                to.on('close', () => callback(sftp.end()));
+
+                from.pipe(to);
+            });
+        }).connect({
             host: config.host,
             port: config.port,
-            user: config.user,
-            password: config.passwd,
-            path: `${file.backupPath}/${name}.gz`
-        }, function(err) {
-            if (err) {
-                createLog(`[err] : ${err}`);
-                return callback(null);
-            }
-            createLog(`[file] : ${name}.gz`);
-            createLog(`[path] : ${file.backupPath}/${name}.gz `);
-            createLog(`[file added via sftp] ...`);
-
-            callback(name);
+            username: config.user,
+            password: config.passwd
         });
     }, 1);
 
@@ -465,14 +484,13 @@ function cleanBckps (response, request) {
     }, 1);
 
     var filesToDeleteQueue = async.queue(function(file, callback) {
-        // createLog();
         if (file.delete == true) {
             fs.unlink(`${file.path}/${file.name}`, (err) => {
-                callback(createLog(err ? `[err] : ${err}` : `[file]         : ${file.name} deleted\n`))
+                callback(createLog(err ? `[err] : ${err}` : `[file]       : ${file.name} deleted\n`))
                 createLog();
             });
         } else {
-            callback(createLog(`[file]       : ${file.name} not deleted\n`));
+            callback(createLog(`[file]     : ${file.name} not deleted\n`));
             createLog();
         }
     }, 1);

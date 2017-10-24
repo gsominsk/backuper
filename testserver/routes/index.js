@@ -35,24 +35,47 @@ function deleteFilesFromServer(req, res) {
 
 function copyFileToServer (req, res) {
     var data = {
-        config: {
-            protocol: 'FTP',
-            host: '66.220.9.50',
-            port: '21',
-            user: 'gsominsk',
-            passwd: '19983562'
+        ftp: {
+            config: {
+                protocol: 'FTP',
+                host: '66.220.9.50',
+                port: '21',
+                user: 'gsominsk',
+                passwd: '19983562'
+            },
+            bckps: [{
+                folder: __dirname+'/../backuptest',
+                filename: '',
+                backuppath: 'backup/',
+                maxBackupFilesToServer: ''
+            }, {
+                folder: __dirname+'/../backuptest',
+                filename: 'backup.txt',
+                backuppath: 'backup/',
+                maxBackupFilesToServer: ''
+            }]
         },
-        bckps: [{
-            folder: __dirname+'/../backuptest',
-            filename: '',
-            backuppath: 'backup/',
-            maxBackupFilesToServer: ''
-        }, {
-            folder: __dirname+'/../backuptest',
-            filename: 'backup.txt',
-            backuppath: 'backup/',
-            maxBackupFilesToServer: ''
-        }]
+        sftp: {
+            config: {
+                protocol: 'SFTP',
+                host: 's.bpi.in.ua',
+                port: '22',
+                user: 'norn',
+                passwd: 'c2h5ohbrew'
+            },
+            bckps: [{
+                folder: __dirname+'/../backuptest',
+                filename: '',
+                backuppath: '/mnt/Files/',
+                maxBackupFilesToServer: ''
+            }, {
+                folder: __dirname+'/../backuptest',
+                filename: 'backup.txt',
+                backuppath: '/mnt/Files/',
+                maxBackupFilesToServer: ''
+            }]
+
+        }
     };
 
     var log = '';
@@ -64,7 +87,7 @@ function copyFileToServer (req, res) {
         });
     }, 1);
 
-    q.push(data, (str) => {
+    q.push(data.sftp, (str) => {
         console.log(str);
         log += str;
     });
