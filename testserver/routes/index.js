@@ -87,7 +87,7 @@ function copyFileToServer (req, res) {
         });
     }, 1);
 
-    q.push(data.sftp, (str) => {
+    q.push(data.ftp, (str) => {
         console.log(str);
         log += str;
     });
