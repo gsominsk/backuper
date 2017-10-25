@@ -157,7 +157,7 @@ function getDataForBackup(response,request) {
         // adding new files/folders to archivate via archive
         for (var i = 0; i < data.bckps.length; i++)
             fileValidation(data.bckps[i]) == true ?
-                q.push({obj:data.bckps[i], config:data.config, unique: i})
+                q.push({obj:data.bckps[i], config:data.config, unique: i}, () => {})
                 : errorResponseEnd(response, `[err] : File ${data.bckps[i].filename} with path ${data.bckps[i].folder} not added.`);
 
         // sending data back for logs
@@ -274,7 +274,7 @@ function sendFilesViaFTP (files, config, response, callback) {
     }, 1);
 
     for (var i = 0; i < files.length; i++)
-        q.push(files[i], false);
+        q.push(files[i], () => {});
 
     q.drain = () => callback(c.end());
 }
@@ -323,7 +323,7 @@ function sendFilesViaSFTP (files, config, response, callback) {
     }, 1);
 
     for (var i = 0; i < files.length; i++)
-        q.push(files[i], false);
+        q.push(files[i], () => {});
 
     q.drain = () => callback();
 }
@@ -442,7 +442,7 @@ function cleanBckps (response, request) {
                     q.push({
                         file    : file,
                         range   : data.range
-                    }, false);
+                    }, () => {});
                 }
 
                 q.drain = () => {
@@ -475,7 +475,7 @@ function cleanBckps (response, request) {
                 name: data.file,
                 path: dir,
                 delete: !dates.inRange(stats.birthtime, startDate, endDate)
-            });
+            }, () => {});
 
             filesToDeleteQueue.drain = () => {
                 callback();
@@ -494,383 +494,7 @@ function cleanBckps (response, request) {
             createLog();
         }
     }, 1);
-
-    // можно увеличить скорость, нам приходят файлы, мы их считываем с помощью fs.stat после чего
-    // впушиваем их в новую async.queue который удаляет файлы, синхронности работы не требуется так
-    // что можно ускорить.
 }
-
-// работает
-// var d = moment().subtract(1, 'days').format().toString();
-//
-// console.log(dates.inRange(stats.birthtime, d, new Date()));
-
-
-/**
- * OLD VERSION
- */
-/*
-// tested, working
-function makeBackupViaFTP(response,request){
-    response.writeHead(200, {"Content-Type": "text/html"});
-
-    var data = '';
-    ll = '';
-    createLog(`[Request handler 'copyFileToFTP' was called.] ... \n`);
-
-    request.addListener('data', function(chunk) {
-        data += chunk;
-        createLog('==========================================');
-        createLog(`[data] : ${data}`);
-        createLog('==========================================');
-    });
-
-    request.addListener('end', function() {        //logtext.log('connect');
-        try {
-            let dataobj = JSON.parse(data);
-            if(dataobj.folder[dataobj.folder.length-1]!='/')
-                dataobj.folder = dataobj.folder + '/';
-            logtext.log(dataobj.folder[dataobj.folder.length-1]);
-            fs.exists(dataobj.folder, (exists) => {
-                createLog('=========================================='); // log
-                createLog(`[folder exists] : ${exists}\n`); // log
-                createLog(`[folder path] : ${dataobj.folder}\n`); // log
-                createLog('=========================================='); // log
-            });
-            if(dataobj.folder + dataobj.filename){
-                let filenotfound = false;
-                fs.exists(dataobj.folder + dataobj.filename, (exists) => {
-                    if (exists) {
-                        createLog(`[GZIP Start] ...\n`); // log
-                        var gzip = zlib.createGzip();
-                        var inp = fs.createReadStream(dataobj.folder + dataobj.filename);
-                        var out = fs.createWriteStream(dataobj.folder + dataobj.filename + '.gz');
-                        inp.pipe(gzip).pipe(out);
-                        inp.on('close',function(){
-                            createLog(`[GZIP Done] ...\n`); // log
-                            fs.exists(dataobj.folder + dataobj.filename + '.gz', (exists) => {
-                                if (exists) {
-                                    createLog(`[delete file] : ${dataobj.folder + dataobj.filename}\n`); // log
-                                    // fs.unlink(dataobj.folder + dataobj.filename); // !!!потом раскоментить!!!
-                                    if(dataobj.protocol=="FTP"){
-                                        let c = new ftpClient();
-                                        let cdata = {
-                                            host:  dataobj.host,
-                                            port: dataobj.port,
-                                            user: dataobj.user,
-                                            password: dataobj.passwd
-                                        };
-                                        c.connect(cdata);
-                                        createLog(`[connecting] ... \n`); // log
-                                        c.on('ready', function() {
-                                            createLog(`[connected] ... \n`); // log
-                                            createLog(`[this file] : ${dataobj.folder + dataobj.filename}.gz \n`); // log
-                                            createLog(`[put in this direcory] : ${dataobj.backuppath}/${dataobj.filename}.gz \n`); // log
-                                            c.on('jsftp_debug', function(eventType, data) {
-                                                console.log('DEBUG: ', eventType);
-                                                console.log(JSON.stringify(data, null, 2));
-
-                                                response.write(ll);
-                                                response.end();
-                                            });
-                                            c.put(dataobj.folder + dataobj.filename + '.gz',
-                                                dataobj.backuppath + '/' + dataobj.filename + '.gz',
-                                                function(e) {
-                                                if (e) throw e;
-                                                    createLog(`[file] : ${dataobj.filename}.gz \n`); // log
-                                                    createLog(`[path] : ${dataobj.backuppath}/${dataobj.filename}.gz \n`); // log
-                                                    createLog(`[file added ftp] ... \n`); // log
-                                                    response.write(ll);
-                                                    response.end();
-                                                    c.end();
-                                                });
-                                        });
-                                        c.on('error',function(error){
-                                            console.log(error);
-                                            createLog(`[err] : ${error}\n`); // log
-
-                                            response.write(ll);
-                                            response.end();
-                                        });
-                                    }
-                                    if(dataobj.protocol=="SFTP"){
-                                        client.scp(dataobj.folder + dataobj.filename + '.gz', {
-                                            host: dataobj.host,
-                                            port:dataobj.port,
-                                            username: dataobj.user,
-                                            password: dataobj.passwd,
-                                            path: dataobj.backuppath
-                                        }, function(err) {
-                                            err ?
-                                                createLog(`[err] : ${err}\n`)
-                                                : createLog(`[upload completed sftp]\n`);
-
-                                            response.write(ll);
-                                            response.end();
-
-                                        });
-                                    }
-                                } else {
-                                    response.write(ll);
-                                    response.end();
-                                }
-                            });
-                        });
-                    } else {
-                        filenotfound = true;
-                    }
-                });
-                if(filenotfound){
-                    createLog(`[try found file] ...\n`); // log
-                    fsnew.exists(dataobj.folder + dataobj.filename + '.gz', (exists1) => {
-                        if (exists1) {
-                            createLog(`[file found] : ${dataobj.folder}${dataobj.filename}.gz\n`); // log
-                        }
-                        response.write(ll);
-                        response.end();
-                    });
-                }
-            }
-        } catch (e) {
-            createLog(`[err] : ${e}\n`);
-            response.write(ll);
-            response.end();
-            return logtext.error(e);
-        }
-    });
-}
-
-// -
-function sendBackupFilesThroughSSH(response, request) {
-  console.log(request);
-
-    var backupScenarios = [{
-        idName: "FM_Daily",
-        pathToBackupFiles: "C:/Program Files/FileMaker/FileMaker Server/Data/Backups/",
-        fileNameTemplate: "Daily_",
-        maxBackupFilesToServer: 1,
-        runSendBackupFilesAtTime: "19:00",
-        targetDirectory: "/usr/local/bin/BackupsFromAnotherServer/FileMaker/"
-    }, {
-        idName: "FM_Weekly",
-        pathToBackupFiles: "C:/Program Files/FileMaker/FileMaker Server/Data/Backups/",
-        fileNameTemplate: "Weekly_",
-        maxBackupFilesToServer: 0,
-        runSendBackupFilesAtTime: "19:00",
-        targetDirectory: "/usr/local/bin/BackupsFromAnotherServer/FileMaker/"
-    }];
-
-  var backupsInfoHolder = [];
-  var prevDoneBackupsList = {};
-  var actualDoneBackupsList = {};
-  var tempIndex = 0;
-  var curScenario = null;
-
-  logtext.log("\n\n\n");
-  logtext.log("Start backuping...");
-
-  let idNameList = {};
-  let error = false;
-  for (var i = 0; i < backupScenarios.length; i++) {
-    if (backupScenarios[i].hasOwnProperty('idName') == false) {
-      logtext.log("'idName' property undefined");
-      error = true;
-    }
-    if (!error) {
-      if (idNameList.hasOwnProperty(backupScenarios[i].idName) == false) {
-        idNameList[backupScenarios[i].idName] = true;
-      } else {
-        logtext.log("ID name '" + backupScenarios[i].idName + "' is not unique!");
-        error = true;
-      }
-    } else {
-      logtext.log("Backuping process interrupted");
-      return;
-    }
-  }
-
-  if (fs.existsSync(__dirname + "/doneBackupsList.txt")) {
-    try {
-      prevDoneBackupsList = JSON.parse(fs.readFileSync(__dirname + "/doneBackupsList.txt", 'utf8'));
-    } catch (err) {
-      logtext.log("JSON parse error: \n" + err);
-    }
-  }
-  //return;
-
-  for (var i = 0; i < backupScenarios.length; i++) {
-    curScenario =  backupScenarios[i];
-    logtext.log(" Scenario '" + curScenario.idName + "'");
-
-    if (fs.existsSync(curScenario.pathToBackupFiles)) {
-      let backupDirItemList = fs.readdirSync(curScenario.pathToBackupFiles
-      ).filter(function(index) {
-        let fileNameTemp = curScenario.fileNameTemplate;
-        return (index.substr(0, fileNameTemp.length) === fileNameTemp);
-      }).map(function(index) {
-        return join(curScenario.pathToBackupFiles, index);
-      }).sort(function (a, b) {
-        return a == b? 0: a<b ? 1: -1;
-      });
-      if (curScenario.maxBackupFilesToServer != undefined &&
-          backupDirItemList.length > curScenario.maxBackupFilesToServer) {
-        backupDirItemList = backupDirItemList.slice(0,curScenario.maxBackupFilesToServer);
-        logtext.log("Number of backups was limited to " + curScenario.maxBackupFilesToServer);
-      }
-
-      tempIndex = backupsInfoHolder.length;
-      if (backupsInfoHolder[tempIndex] === undefined) {
-        backupsInfoHolder[tempIndex] = {};
-      }
-      backupsInfoHolder[tempIndex].scenario = curScenario;
-      backupsInfoHolder[tempIndex].backupDirItemList = backupDirItemList;
-      backupsInfoHolder[tempIndex].backupedList = [];
-
-      actualDoneBackupsList[curScenario.idName] = [];
-      if (prevDoneBackupsList.hasOwnProperty(curScenario.idName)) {
-        actualDoneBackupsList[curScenario.idName] = prevDoneBackupsList[curScenario.idName];
-        if (actualDoneBackupsList[curScenario.idName] === undefined) {
-          actualDoneBackupsList[curScenario.idName] = [];
-        }
-      }
-    } else {
-      logtext.log(curScenario.idName + ". No such directory: " + curScenario.pathToBackupFiles);
-    }
-  }
-  // makeArchive(backupsInfoHolder,actualDoneBackupsList,0,0);
-}
-
-// Failed to make zip by JSZip and AdmZip, used Archiver
-function makeArchive(backupsInfoHolder,actualDoneBackupsList,scIndex,dirItemIndex) {
-
-  if (scIndex == undefined) {
-    scIndex = 0;
-  }
-  if (dirItemIndex == undefined) {
-    dirItemIndex = 0;
-  }
-  if (scIndex >= backupsInfoHolder.length) {
-    createLog('[makeSSHTrasmit in]');
-    createLog('[backupsInfoHolder.length] : ');
-    createLog(backupsInfoHolder.length+'\n');
-    createLog('[backupsInfoHolder] : ' + backupsInfoHolder + '\n');
-    createLog('[scIndex] : ' + scIndex + '\n');
-    // makeSSHTrasmit(backupsInfoHolder,actualDoneBackupsList,null,0,0);
-    return;
-  }
-
-  let curInfoHolder = backupsInfoHolder[scIndex];
-  if (dirItemIndex == 0) {
-    logtext.log('Current backuping process ' + curInfoHolder.scenario.idName);
-  }
-  if (dirItemIndex >= curInfoHolder.backupDirItemList.length) {
-    makeArchive(backupsInfoHolder,actualDoneBackupsList,scIndex += 1,0);
-    return;
-  }
-
-  let curBackupItem = curInfoHolder.backupDirItemList[dirItemIndex];
-  let outFileName = curBackupItem.slice(curBackupItem.lastIndexOf(path.sep)+1);
-  if (outFileName) {
-    if (fs.lstatSync(curBackupItem).isFile() && ~outFileName.lastIndexOf(".")) {
-      outFileName = outFileName.slice(0,curBackupItem.lastIndexOf("."));
-    }
-    outFileName = outFileName  + '.zip'
-    let zipFileName = path.dirname(curBackupItem) + path.sep + outFileName;
-
-    let prevArchivedList = actualDoneBackupsList[curInfoHolder.scenario.idName];
-    var isAlreadyZipped = false;
-    for (var i = 0; i < prevArchivedList.length; i++) {
-      if (prevArchivedList[i] == outFileName) {
-        isAlreadyZipped = true;
-        i = prevArchivedList.length;
-      }
-    }
-    if (!isAlreadyZipped) {
-      let output = fs.createWriteStream(zipFileName);
-      let archive = archiver('zip', {
-          zlib: { level: 9 } // Sets the compression level. Z_BEST_COMPRESSION = 9.
-      });
-
-      output.on('close', function() {
-        logtext.log(curBackupItem + ' has been archived');
-        logtext.log(archive.pointer() + ' total bytes');
-        //logtext.log('archiver has been finalized and the output file descriptor has closed.');
-        curInfoHolder.backupedList.push(outFileName);
-        makeArchive(backupsInfoHolder,actualDoneBackupsList,scIndex,dirItemIndex+=1)
-      });
-
-      archive.on('error', function(err) {
-        //throw err;
-        logtext.log('Archive error: ' + err);
-      });
-
-      archive.pipe(output);
-      archive.directory(curBackupItem, false);
-      archive.finalize();
-    }
-  }
-}
-
-function makeSSHTrasmit(backupsInfoHolder,actualDoneBackupsList, SSHConfig,scIndex,backupIndex) {
-  var SSHClient;
-
-  if (scIndex == undefined) {
-    scIndex = 0;
-  }
-  if (backupIndex == undefined) {
-    backupIndex = 0;
-  }
-  if (scIndex >= backupsInfoHolder.length) {
-    logtext.log('SSH transmission finished');
-    if (SSHClient != undefined) {
-      SSHClient.close();
-    }
-    return;
-  }
-  if (backupIndex >= backupsInfoHolder[scIndex].backupedList.length) {
-    makeSSHTrasmit(backupsInfoHolder,actualDoneBackupsList,SSHConfig,
-      scIndex +=1,0);
-    return;
-  }
-
-  SSHClient = SSHConfig;
-  if (SSHClient == undefined) {
-    let prKey = fs.readFileSync(__dirname + "/BackupKey", 'utf8');
-
-    SSHClient = new client.Client();
-    SSHClient.defaults({
-      port: 22,
-      host: '144.76.186.251',
-      username: 'norn',
-      privateKey: prKey
-    });
-    logtext.log('SSH transmission started');
-  }
-
-  let curInfoHolder = backupsInfoHolder[scIndex];
-  let archivedFile = curInfoHolder.scenario.pathToBackupFiles + curInfoHolder.backupedList[backupIndex];
-  SSHClient.upload(archivedFile,curInfoHolder.scenario.targetDirectory,
-    function(err) {
-      if(err){
-        logtext.log(err);
-      }else{
-        logtext.log('Uploaded: ' + curInfoHolder.backupedList[backupIndex]);
-        fs.unlinkSync(archivedFile);
-      }
-      //makeSSHTrasmit(backupsInfoHolder,actualDoneBackupsList,SSHConfig,scIndex,backupIndex += 1);
-  });
-}
-
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  while ((new Date().getTime() - start) <= milliseconds){}
-}
-
-// exports.makeBackupViaFTP = makeBackupViaFTP;
-// exports.makeArchive = makeArchive;
-// exports.sendBackupFilesThroughSSH = sendBackupFilesThroughSSH;
-
-*/
 
 exports.getDataForBackup = getDataForBackup;
 exports.cleanBckps = cleanBckps;

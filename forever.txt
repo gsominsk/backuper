@@ -1,7 +1,0 @@
-http://blog.aaa-nan.info/2013/02/nodejs-forever.html
-
-https://www.npmjs.com/package/forever
-
-https://github.com/foreverjs/forever
-
-Для постоянной работы программы

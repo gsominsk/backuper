@@ -1,9 +1,9 @@
 {
-  "name": "bckp",
+  "name": "bckupserver",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./index.js"
   },
   "dependencies": {
     "adm-zip": "^0.4.7",

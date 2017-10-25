@@ -1,0 +1,47 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/home/jyscha/.nvm/versions/node/v6.2.2/bin/node',
+1 verbose cli   '/home/jyscha/.nvm/versions/node/v6.2.2/bin/npm',
+1 verbose cli   'start' ]
+2 info using npm@3.9.5
+3 info using node@v6.2.2
+4 verbose run-script [ 'prestart', 'start', 'poststart' ]
+5 info lifecycle bckupserver@0.0.0~prestart: bckupserver@0.0.0
+6 silly lifecycle bckupserver@0.0.0~prestart: no script for prestart, continuing
+7 info lifecycle bckupserver@0.0.0~start: bckupserver@0.0.0
+8 verbose lifecycle bckupserver@0.0.0~start: unsafe-perm in lifecycle true
+9 verbose lifecycle bckupserver@0.0.0~start: PATH: /home/jyscha/.nvm/versions/node/v6.2.2/lib/node_modules/npm/bin/node-gyp-bin:/home/jyscha/projects/bckupserver/node_modules/.bin:/home/jyscha/.nvm/versions/node/v6.2.2/bin:/home/jyscha/.nvm/versions/node/v6.2.2/bin:/home/jyscha/bin:/home/jyscha/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+10 verbose lifecycle bckupserver@0.0.0~start: CWD: /home/jyscha/projects/bckupserver
+11 silly lifecycle bckupserver@0.0.0~start: Args: [ '-c', 'node ./index.js' ]
+12 silly lifecycle bckupserver@0.0.0~start: Returned: code: 1  signal: null
+13 info lifecycle bckupserver@0.0.0~start: Failed to exec start script
+14 verbose stack Error: bckupserver@0.0.0 start: `node ./index.js`
+14 verbose stack Exit status 1
+14 verbose stack     at EventEmitter.<anonymous> (/home/jyscha/.nvm/versions/node/v6.2.2/lib/node_modules/npm/lib/utils/lifecycle.js:245:16)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at EventEmitter.emit (events.js:191:7)
+14 verbose stack     at ChildProcess.<anonymous> (/home/jyscha/.nvm/versions/node/v6.2.2/lib/node_modules/npm/lib/utils/spawn.js:24:14)
+14 verbose stack     at emitTwo (events.js:106:13)
+14 verbose stack     at ChildProcess.emit (events.js:191:7)
+14 verbose stack     at maybeClose (internal/child_process.js:852:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:215:5)
+15 verbose pkgid bckupserver@0.0.0
+16 verbose cwd /home/jyscha/projects/bckupserver
+17 error Linux 4.8.0-53-generic
+18 error argv "/home/jyscha/.nvm/versions/node/v6.2.2/bin/node" "/home/jyscha/.nvm/versions/node/v6.2.2/bin/npm" "start"
+19 error node v6.2.2
+20 error npm  v3.9.5
+21 error code ELIFECYCLE
+22 error bckupserver@0.0.0 start: `node ./index.js`
+22 error Exit status 1
+23 error Failed at the bckupserver@0.0.0 start script 'node ./index.js'.
+23 error Make sure you have the latest version of node.js and npm installed.
+23 error If you do, this is most likely a problem with the bckupserver package,
+23 error not with npm itself.
+23 error Tell the author that this fails on your system:
+23 error     node ./index.js
+23 error You can get information on how to open an issue for this project with:
+23 error     npm bugs bckupserver
+23 error Or if that isn't available, you can get their info via:
+23 error     npm owner ls bckupserver
+23 error There is likely additional logging output above.
+24 verbose exit [ 1, true ]
