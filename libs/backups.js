@@ -183,6 +183,7 @@ function getDataForBackup(response,request) {
                 createLog('==============================');
                 createLog(timecheck());
 
+                console.log(ll);
                 response.write(ll);
                 response.end();
             });
@@ -362,6 +363,7 @@ function configValidation (config) {
 function errorResponseEnd (response, err) {
     err ? createLog(err) : 0;
     response.write(ll);
+    console.log(ll);
     return response.end();
 }
 
@@ -458,6 +460,7 @@ function cleanBckps (response, request) {
         createLog('             time             ');
         createLog('==============================');
         createLog(timecheck());
+        console.log(ll);
         response.write(ll);
         response.end();
     });
