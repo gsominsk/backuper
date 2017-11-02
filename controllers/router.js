@@ -1,7 +1,5 @@
 var logtext = require('../helpers/logtext');
 var fs      = require('fs');
-var mmm     = require('mmmagic'),
-            Magic = mmm.Magic;
 
 
 function route(handle, pathname, response, request) {
@@ -16,16 +14,10 @@ function route(handle, pathname, response, request) {
     fs.readFile(`${config.toFiles}${pathname}`, 'utf8', function (err, data) {
         if (err) throw err;
 
-        var magic = new Magic(mmm.MAGIC_MIME_TYPE);
-        magic.detectFile(config.toFiles+pathname, function(err, result) {
-            if (err) throw err;
-
-            var fileStream = fs.createReadStream(`${config.toFiles}${pathname}`);
-            fileStream.on('open', function () {
-                fileStream.pipe(response);
-            });
+        var fileStream = fs.createReadStream(`${config.toFiles}${pathname}`);
+        fileStream.on('open', function () {
+            fileStream.pipe(response);
         });
-
     });
   } else {
     logtext.log("No request handler found for " + pathname);

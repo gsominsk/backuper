@@ -45,7 +45,6 @@
     "minimatch": "^3.0.4",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
-    "mmmagic": "^0.4.5",
     "moment": "^2.19.1",
     "morgan": "~1.9.0",
     "ms": "^2.0.0",
