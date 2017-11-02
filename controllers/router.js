@@ -1,6 +1,7 @@
 var logtext = require('../helpers/logtext');
 var fs      = require('fs');
-const path = require('path');
+const path  = require('path');
+const http  = require('http');
 
 var config = JSON.parse(fs.readFileSync('config/paths.json', 'utf8'));
 
@@ -23,23 +24,26 @@ const mimeType = {
 
 function route(handle, pathname, response, request) {
   //logtext.log("About to route a request for " + pathname);
-
   if (typeof handle[pathname] === 'function') {
     handle[pathname](response, request);
+  }
+  else if (pathname.search(/.hal/ig) != -1) {
+    var options = {
+        host: 'http://localhost:1088',
+        path: pathname
+    };
+
+    http.request(options, (response) => {
+        console.log(response);
+    }).end();
   }
   else if (fs.existsSync(`${config.toFiles}${pathname}`)) {
     fs.readFile(`${config.toFiles}${pathname}`, 'binary', function (err, data) {
         if (err) throw err;
 	
-	const ext = path.parse(pathname).ext;
-        // if the file is found, set Content-type and send data
-       // response.setHeader('Content-type', mimeType[ext] || 'text/plain' );
-	response.writeHead(200, {"Content-Type": mimeType[ext] || 'text/plain'});
+        const ext = path.parse(pathname).ext;
+        response.writeHead(200, {"Content-Type": mimeType[ext] || 'text/plain'});
         response.end(data,"binary");
-        /*var fileStream = fs.createReadStream(`${config.toFiles}${pathname}`);
-        fileStream.on('open', function () {
-            fileStream.pipe(response);
-        });*/
     });
   } else {
     logtext.log("No request handler found for " + pathname);
