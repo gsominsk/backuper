@@ -29,12 +29,21 @@ function route(handle, pathname, response, request) {
   }
   else if (pathname.search(/.hal/ig) != -1) {
     var options = {
-        host: 'http://localhost:1088',
+        url: 'http://localhost:1088',
         path: pathname
     };
+  
+    http.request(options, (res) => {
+      var str = '';
+      res.on('data', function (body) {
+        str += body;
+      });
 
-    http.request(options, (response) => {
-        console.log(response);
+      res.on('end', function () {
+        console.log(str);
+	response.writeHead(404, {"Content-Type": "text/plain"});
+        response.end(str);
+      });
     }).end();
   }
   else if (fs.existsSync(`${config.toFiles}${pathname}`)) {
