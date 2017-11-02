@@ -199,7 +199,7 @@ function index(response,request){
     if (user) {
       users[user] = null;
     }
-    fs.readFile('./../Index.html', function(err, data){
+    fs.readFile('./../views/index/Index.html', function(err, data){
         if (err) {
             response.writeHead(200, {   "Content-Type": "text/html",
                                         "Cache-Control" : "no-cache",
