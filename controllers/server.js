@@ -9,7 +9,7 @@ function start(route, handle) {
     route(handle, pathname, response, request);
   }
 
-  var server = http.createServer(onRequest).listen(1070);
+  var server = http.createServer(onRequest).listen(1071);
 
   server.on('clientError', (err, socket) => {
       logtext.log('HTTP/1.1 400 Bad Request');

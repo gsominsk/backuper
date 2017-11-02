@@ -1,11 +1,10 @@
 var logtext = require('../helpers/logtext');
 var fs      = require('fs');
 
+var config = JSON.parse(fs.readFileSync('config/paths.json', 'utf8'));
 
 function route(handle, pathname, response, request) {
   //logtext.log("About to route a request for " + pathname);
-  var config = JSON.parse(fs.readFileSync('config/paths.json', 'utf8'));
-
 
   if (typeof handle[pathname] === 'function') {
     handle[pathname](response, request);
